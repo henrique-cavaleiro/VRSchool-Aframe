@@ -1,9 +1,13 @@
 AFRAME.registerComponent('gaze-listener', {
   init: function () {
-    var el = this.el;
+    const el = this.el;
     el.addEventListener('click', function () {
-      document.querySelector('#keyboard').setAttribute('visible', 'true');
-      document.querySelector('#textfield').setAttribute('visible', 'true');
+      const keyboard = document.querySelector('#keyboard');
+      const textfield = document.querySelector('#textfield');
+
+      // Toon het toetsenbord en het tekstvlak
+      keyboard.setAttribute('visible', true);
+      textfield.setAttribute('visible', true);
     });
   }
 });
