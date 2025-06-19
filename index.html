@@ -27,7 +27,7 @@
           wasd-controls-enabled="false">
           <!-- Fuse cursor (reticle) -->
           <a-entity 
-            cursor="fuse: true; fuseTimeout: 5000" 
+            cursor="fuse: true; fuseTimeout: 2000" 
             position="0 0 -1"
             geometry="primitive: ring; radiusInner: 0.015; radiusOuter: 0.025"
             material="color: cyan; shader: flat"
@@ -37,20 +37,21 @@
         </a-entity>
       </a-entity>
 
-      <!-- 360° School Afbeelding -->
-      <a-sky src="assets/Overdekte.jpg" rotation="0 -90 0"></a-sky>
-      <!-- ↑ Zet je eigen 360° foto in assets/school-360.jpg -->
+      <!-- 360° School Afbeelding (starts with first room) -->
+      <a-sky id="sky" src="assets/room1.jpg" rotation="0 -90 0"></a-sky>
+      <!-- Use your own images: assets/room1.jpg, assets/room2.jpg, ... -->
 
-      <!-- Zwevende gaze-knop -->
-      <a-entity 
-        id="gazeButton"
-        class="gaze-interactive"
-        geometry="primitive: circle; radius: 0.15"
-        material="color: #2196f3; opacity: 0.9"
-        position="0 2 -2"
-        gaze-listener
-        text="value: Open toetsenbord; align: center; color: white; width: 2"
-      ></a-entity>
+      <!-- Next Room Button (click or gaze to go to next room) -->
+      <a-entity id="nextRoomButton"
+                geometry="primitive: plane; width: 0.5; height: 0.2"
+                material="color: #4CAF50; opacity: 0.8"
+                position="1 1.5 -2"
+                text="value: Volgende ruimte; align: center; color: white; width: 2"
+                class="gaze-interactive"
+                event-set__enter="_event: mouseenter; material.color: #81C784"
+                event-set__leave="_event: mouseleave; material.color: #4CAF50"
+                next-room>
+      </a-entity>
 
       <!-- Virtueel toetsenbord, standaard verborgen -->
       <a-entity 
@@ -74,6 +75,7 @@
       <!-- Custom scripts -->
       <script src="gaze-listener.js"></script>
       <script src="keyboard-input.js"></script>
+      <script src="next-room.js"></script>
     </a-scene>
   </body>
 </html>
