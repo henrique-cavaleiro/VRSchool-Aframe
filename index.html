@@ -5,19 +5,22 @@
     <title>360° School VR A-Frame Demo</title>
     <meta name="description" content="360° school VR met gaze-button en virtueel toetsenbord">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- A-Frame -->
+    <!-- A-Frame core -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <!-- aframe-gaze-component voor fuse/gaze interactie -->
+    <!-- aframe-gaze-component for gaze input -->
     <script src="https://unpkg.com/aframe-gaze-component/dist/aframe-gaze-component.min.js"></script>
-    <!-- aframe-keyboard voor virtueel toetsenbord -->
+    <!-- aframe-keyboard for virtual keyboard -->
     <script src="https://cdn.jsdelivr.net/npm/aframe-keyboard@1.3.1/dist/aframe-keyboard.min.js"></script>
+    <!-- aframe-look-at-component to keep keyboard facing user -->
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <a-scene vr-mode-ui="enabled: true" embedded>
-      <!-- Camera with fuse cursor for gaze input -->
+      <!-- Camera with fuse cursor for gaze input and gyro support -->
       <a-entity id="cameraRig">
         <a-entity 
+          id="mainCamera"
           camera 
           look-controls 
           position="0 1.6 0"
@@ -36,7 +39,7 @@
 
       <!-- 360° School Afbeelding -->
       <a-sky src="assets/Overdekte.jpg" rotation="0 -90 0"></a-sky>
-      <!-- ↑ Vervang bovenstaande src door een 360° schoolafbeelding indien beschikbaar -->
+      <!-- ↑ Zet je eigen 360° foto in assets/school-360.jpg -->
 
       <!-- Zwevende gaze-knop -->
       <a-entity 
@@ -47,7 +50,7 @@
         position="0 2 -2"
         gaze-listener
         text="value: Open toetsenbord; align: center; color: white; width: 2"
-        ></a-entity>
+      ></a-entity>
 
       <!-- Virtueel toetsenbord, standaard verborgen -->
       <a-entity 
@@ -55,6 +58,7 @@
         visible="false"
         position="0 0.6 -1.2"
         keyboard="inputEl: #textfield"
+        look-at="#mainCamera"
       ></a-entity>
 
       <!-- Onzichtbaar tekstveld voor invoer -->
@@ -67,7 +71,7 @@
         text="value: ; color: #111; align: left; width: 0.95"
       ></a-entity>
 
-      <!-- Componenten scripts -->
+      <!-- Custom scripts -->
       <script src="gaze-listener.js"></script>
       <script src="keyboard-input.js"></script>
     </a-scene>

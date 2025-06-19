@@ -1,13 +1,10 @@
+// Component: Show keyboard and text field when gaze button is activated by fuse
 AFRAME.registerComponent('gaze-listener', {
   init: function () {
-    const el = this.el;
+    var el = this.el;
     el.addEventListener('click', function () {
-      const keyboard = document.querySelector('#keyboard');
-      const textfield = document.querySelector('#textfield');
-
-      // Toon het toetsenbord en het tekstvlak
-      keyboard.setAttribute('visible', true);
-      textfield.setAttribute('visible', true);
+      document.querySelector('#keyboard').setAttribute('visible', 'true');
+      document.querySelector('#textfield').setAttribute('visible', 'true');
     });
   }
 });

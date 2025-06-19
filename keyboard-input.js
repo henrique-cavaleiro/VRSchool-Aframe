@@ -1,20 +1,11 @@
-AFRAME.registerComponent('keyboard-input', {
+// Component: Update text field with virtual keyboard input
+AFRAME.registerComponent('keyboard', {
+  schema: {
+    inputEl: { type: 'selector' }
+  },
   init: function () {
-    const textfield = document.querySelector('#textfield');
-    const inputEl = document.querySelector('#textfield');
-    
-    inputEl.addEventListener('keyboardinput', function (event) {
-      const currentValue = textfield.getAttribute('text').value;
-      textfield.setAttribute('text', 'value', currentValue + event.detail.value);
-    });
-
-    inputEl.addEventListener('keyboardbackspace', function () {
-      const currentValue = textfield.getAttribute('text').value;
-      textfield.setAttribute('text', 'value', currentValue.slice(0, -1));
-    });
-
-    inputEl.addEventListener('keyboardenter', function () {
-      console.log("Ingevoerde tekst:", textfield.getAttribute('text').value);
+    this.el.addEventListener('keyboardinput', (e) => {
+      this.data.inputEl.setAttribute('text', 'value', e.detail.value);
     });
   }
 });
