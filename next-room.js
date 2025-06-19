@@ -2,8 +2,8 @@ AFRAME.registerComponent('next-room', {
   init: function () {
     // List your room photo URLs here, in the order you want to cycle through
     this.rooms = [
-      'assets/room1.jpg',
-      'assets/room2.jpg'
+      'assets/Overdekte.jpg',
+      'assets/Lockers_ET.jpg'
       // Add more rooms as needed, e.g. 'assets/room3.jpg'
     ];
     this.currentRoom = 0;
