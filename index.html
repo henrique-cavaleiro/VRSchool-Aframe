@@ -38,20 +38,11 @@
       </a-entity>
 
       <!-- 360° School Afbeelding (starts with first room) -->
-      <a-sky id="sky" src="assets/room1.jpg" rotation="0 -90 0"></a-sky>
+      <a-sky id="sky" src="assets/Overdekte.jpg" rotation="0 -90 0"></a-sky>
       <!-- Use your own images: assets/room1.jpg, assets/room2.jpg, ... -->
 
-      <!-- Next Room Button (click or gaze to go to next room) -->
-      <a-entity id="nextRoomButton"
-                geometry="primitive: plane; width: 0.5; height: 0.2"
-                material="color: #4CAF50; opacity: 0.8"
-                position="1 1.5 -2"
-                text="value: Volgende ruimte; align: center; color: white; width: 2"
-                class="gaze-interactive"
-                event-set__enter="_event: mouseenter; material.color: #81C784"
-                event-set__leave="_event: mouseleave; material.color: #4CAF50"
-                next-room>
-      </a-entity>
+      <!-- Container voor dynamische kamerknoppen -->
+      <a-entity id="roomButtons"></a-entity>
 
       <!-- Virtueel toetsenbord, standaard verborgen -->
       <a-entity 
@@ -76,6 +67,13 @@
       <script src="gaze-listener.js"></script>
       <script src="keyboard-input.js"></script>
       <script src="next-room.js"></script>
+      <script>
+        // Start next-room component on scene load
+        document.addEventListener('DOMContentLoaded', function() {
+          // Attach next-room to the scene (or any entity)
+          document.querySelector('a-scene').setAttribute('next-room', '');
+        });
+      </script>
     </a-scene>
   </body>
 </html>
