@@ -1,80 +1,13 @@
 AFRAME.registerComponent('next-room', {
   init: function () {
-    // Kamerstructuur volgens de nieuwe specificaties
-    this.roomMap = {
-      'overdekte': {
-        naam: 'Overdekte',
-        afbeelding: 'assets/Overdekte.jpg',
-        uitgangen: [
-          { label: 'Naar Lockers', naar: 'lockers_et' }
-        ]
-      },
-      'lockers_et': {
-        naam: 'Lockers',
-        afbeelding: 'assets/Lockers_ET.jpg',
-        uitgangen: [
-          { label: 'Terug naar Overdekte', naar: 'overdekte' },
-          { label: 'Naar Praktijkgang (begin)', naar: 'praktijk_gang_begin' }
-        ]
-      },
-      'praktijk_gang_begin': {
-        naam: 'Praktijkgang (begin)',
-        afbeelding: 'assets/Praktijk_gang_begin.jpg',
-        uitgangen: [
-          { label: 'Naar Praktijkgang (midden)', naar: 'praktijk_gang_midden' },
-          { label: 'Naar Lokaal 011 (elektriciteit)', naar: 'lokaal_011_elektriciteit' },
-          { label: 'Naar Hout 2', naar: 'hout_2' }
-        ]
-      },
-      'praktijk_gang_midden': {
-        naam: 'Praktijkgang (midden)',
-        afbeelding: 'assets/Praktijk_gang_midden.jpg',
-        uitgangen: [
-          { label: 'Terug naar Praktijkgang (begin)', naar: 'praktijk_gang_begin' },
-          { label: 'Naar Hout 1', naar: 'hout_1' }
-        ]
-      },
-      'lokaal_011_elektriciteit': {
-        naam: 'Lokaal 011 (elektriciteit)',
-        afbeelding: 'assets/Lokaal_Mr-Desoppere.jpg',
-        uitgangen: [
-          { label: 'Terug naar Praktijkgang (begin)', naar: 'praktijk_gang_begin' }
-        ]
-      },
-      'hout_1': {
-        naam: 'Hout 1',
-        afbeelding: 'assets/Hout_1.jpg',
-        uitgangen: [
-          { label: 'Naar Hout 2', naar: 'hout_2' },
-          { label: 'Naar Hout 3', naar: 'hout_3' },
-          { label: 'Terug naar Praktijkgang (midden)', naar: 'praktijk_gang_midden' }
-        ]
-      },
-      'hout_2': {
-        naam: 'Hout 2',
-        afbeelding: 'assets/Hout_2.jpg',
-        uitgangen: [
-          { label: 'Naar Hout 1', naar: 'hout_1' },
-          { label: 'Naar Hout 3', naar: 'hout_3' },
-          { label: 'Terug naar Praktijkgang (begin)', naar: 'praktijk_gang_begin' }
-        ]
-      },
-      'hout_3': {
-        naam: 'Hout 3',
-        afbeelding: 'assets/Hout_3.jpg',
-        uitgangen: [
-          { label: 'Naar Hout 1', naar: 'hout_1' },
-          { label: 'Naar Hout 2', naar: 'hout_2' }
-        ]
-      }
-    };
+    // (roomMap and questions are now loaded from rooms.js and questions.js)
     this.currentRoom = 'overdekte';
     this.sky = document.querySelector('#sky');
     this.buttonContainer = document.getElementById('roomButtons');
     this.updateRoom();
   },
   updateRoom: function () {
-    const kamer = this.roomMap[this.currentRoom];
+    const kamer = window.roomMap[this.currentRoom];
     this.sky.setAttribute('src', kamer.afbeelding);
     // Verwijder oude knoppen
     this.buttonContainer.innerHTML = '';
@@ -92,5 +25,76 @@ AFRAME.registerComponent('next-room', {
       });
       this.buttonContainer.appendChild(btn);
     });
+
+    // Voeg een extra knop toe voor de vraag (rechts en kijkt naar gebruiker)
+    const questionBtn = document.createElement('a-entity');
+    questionBtn.setAttribute('geometry', 'primitive: plane; width: 2; height: 0.25');
+    questionBtn.setAttribute('material', 'color: #FF9800; opacity: 0.9');
+    questionBtn.setAttribute('position', `3 1 0`); // Rechts van gebruiker
+    questionBtn.setAttribute('look-at', '#mainCamera'); // Kijkt altijd naar gebruiker
+    questionBtn.setAttribute('text', 'value: Stel een vraag; align: center; color: white; width: 3');
+    questionBtn.setAttribute('class', 'gaze-interactive');
+    questionBtn.addEventListener('click', () => {
+      // Vraag en antwoorden ophalen
+      const q = window.questions[this.currentRoom];
+      // Vraag tonen
+      let vraagEntity = document.querySelector('#questionText');
+      if (!vraagEntity) {
+        vraagEntity = document.createElement('a-entity');
+        vraagEntity.setAttribute('id', 'questionText');
+        vraagEntity.setAttribute('geometry', 'primitive: plane; height: 0.15; width: 1.2');
+        vraagEntity.setAttribute('material', 'color: #fffbe6; opacity: 0.95');
+        vraagEntity.setAttribute('position', '0 1.25 -1.5');
+        vraagEntity.setAttribute('text', `value: ${q.vraag}; color: #222; align: center; width: 1.1`);
+        document.querySelector('a-scene').appendChild(vraagEntity);
+      } else {
+        vraagEntity.setAttribute('text', `value: ${q.vraag}; color: #222; align: center; width: 1.1`);
+        vraagEntity.setAttribute('visible', 'true');
+      }
+      // Keyboard tonen en antwoorden doorgeven
+      const keyboard = document.querySelector('#keyboard');
+      keyboard.setAttribute('visible', 'true');
+      keyboard.setAttribute('keyboard', `inputEl: #textfield; answers: ${JSON.stringify(q.antwoorden)}`);
+      document.querySelector('#textfield').setAttribute('visible', 'true');
+      document.querySelector('#textfield').setAttribute('text', 'value', '');
+      document.querySelector('#textfield').setAttribute('position', '0 0.95 -1.5'); // Onder de vraag
+      document.querySelector('#textfield').setAttribute('look-at', '#mainCamera'); // Draait naar gebruiker
+      document.querySelector('#keyboard').setAttribute('position', `0 0.6 -1.2`);
+      // Voeg een beantwoord-knop toe als die nog niet bestaat
+      let saveBtn = document.querySelector('#saveAnswerBtn');
+      if (!saveBtn) {
+        saveBtn = document.createElement('a-entity');
+        saveBtn.setAttribute('id', 'saveAnswerBtn');
+        saveBtn.setAttribute('geometry', 'primitive: plane; width: 1.2; height: 0.22');
+        saveBtn.setAttribute('material', 'color: #4CAF50; opacity: 0.95');
+        saveBtn.setAttribute('position', '0 -0.5 0');
+        saveBtn.setAttribute('text', 'value: Beantwoord; align: center; color: white; width: 2');
+        saveBtn.setAttribute('class', 'gaze-interactive');
+        saveBtn.addEventListener('click', () => {
+          // Sla antwoord op in localStorage
+          const answer = document.querySelector('#textfield').getAttribute('text').value;
+          const room = this.currentRoom;
+          let allAnswers = {};
+          try { allAnswers = JSON.parse(localStorage.getItem('vr_answers') || '{}'); } catch(e) {}
+          allAnswers[room] = answer;
+          localStorage.setItem('vr_answers', JSON.stringify(allAnswers));
+          // Verberg alles
+          if (vraagEntity) vraagEntity.setAttribute('visible', 'false');
+          keyboard.setAttribute('visible', 'false');
+          document.querySelector('#textfield').setAttribute('visible', 'false');
+          saveBtn.setAttribute('visible', 'false');
+        });
+        keyboard.appendChild(saveBtn);
+      } else {
+        saveBtn.setAttribute('visible', 'true');
+      }
+    });
+    this.buttonContainer.appendChild(questionBtn);
+
+    // Verberg vraag, keyboard en textfield bij kamerwissel
+    const vraagEntity = document.querySelector('#questionText');
+    if (vraagEntity) vraagEntity.setAttribute('visible', 'false');
+    document.querySelector('#keyboard').setAttribute('visible', 'false');
+    document.querySelector('#textfield').setAttribute('visible', 'false');
   }
 });
