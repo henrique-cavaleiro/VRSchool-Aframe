@@ -11,13 +11,14 @@ AFRAME.registerComponent('next-room', {
     this.sky.setAttribute('src', kamer.afbeelding);
     // Verwijder oude knoppen
     this.buttonContainer.innerHTML = '';
-    // Voeg knoppen toe voor elke uitgang
+    // Voeg knoppen toe voor elke uitgang (nu links van de camera)
     kamer.uitgangen.forEach(exit => {
       const btn = document.createElement('a-entity');
-      btn.setAttribute('geometry', 'primitive: plane; width: 2; height: 0.25'); // Vergroot de breedte en hoogte
+      btn.setAttribute('geometry', 'primitive: plane; width: 2; height: 0.25');
       btn.setAttribute('material', 'color: #4CAF50; opacity: 0.8');
-      btn.setAttribute('position', `0 ${1.2 - 0.35 * kamer.uitgangen.indexOf(exit)} -2`); // Iets meer ruimte tussen knoppen
-      btn.setAttribute('text', `value: ${exit.label}; align: center; color: white; width: 3`); // Grotere tekstbreedte
+      btn.setAttribute('position', `-3 ${1.2 - 0.35 * kamer.uitgangen.indexOf(exit)} 0`); // Links van gebruiker
+      btn.setAttribute('look-at', '#mainCamera');
+      btn.setAttribute('text', `value: ${exit.label}; align: center; color: white; width: 3`);
       btn.setAttribute('class', 'gaze-interactive');
       btn.addEventListener('click', () => {
         this.currentRoom = exit.naar;
@@ -45,9 +46,12 @@ AFRAME.registerComponent('next-room', {
         vraagEntity.setAttribute('geometry', 'primitive: plane; height: 0.15; width: 1.2');
         vraagEntity.setAttribute('material', 'color: #fffbe6; opacity: 0.95');
         vraagEntity.setAttribute('position', '0 1.25 -1.5');
+        vraagEntity.setAttribute('look-at', '#mainCamera');
         vraagEntity.setAttribute('text', `value: ${q.vraag}; color: #222; align: center; width: 1.1`);
         document.querySelector('a-scene').appendChild(vraagEntity);
       } else {
+        vraagEntity.setAttribute('position', '0 1.25 -1.5');
+        vraagEntity.setAttribute('look-at', '#mainCamera');
         vraagEntity.setAttribute('text', `value: ${q.vraag}; color: #222; align: center; width: 1.1`);
         vraagEntity.setAttribute('visible', 'true');
       }
@@ -57,17 +61,18 @@ AFRAME.registerComponent('next-room', {
       keyboard.setAttribute('keyboard', `inputEl: #textfield; answers: ${JSON.stringify(q.antwoorden)}`);
       document.querySelector('#textfield').setAttribute('visible', 'true');
       document.querySelector('#textfield').setAttribute('text', 'value', '');
-      document.querySelector('#textfield').setAttribute('position', '0 0.95 -1.5'); // Onder de vraag
-      document.querySelector('#textfield').setAttribute('look-at', '#mainCamera'); // Draait naar gebruiker
-      document.querySelector('#keyboard').setAttribute('position', `0 0.6 -1.2`);
-      // Voeg een beantwoord-knop toe als die nog niet bestaat
+      document.querySelector('#textfield').setAttribute('position', '0 0.95 -1.5');
+      document.querySelector('#textfield').setAttribute('look-at', '#mainCamera');
+      document.querySelector('#keyboard').setAttribute('position', '0 0.6 -1.2');
+      document.querySelector('#keyboard').setAttribute('look-at', '#mainCamera');
+      // Beantwoord-knop ook links onder keyboard
       let saveBtn = document.querySelector('#saveAnswerBtn');
       if (!saveBtn) {
         saveBtn = document.createElement('a-entity');
         saveBtn.setAttribute('id', 'saveAnswerBtn');
         saveBtn.setAttribute('geometry', 'primitive: plane; width: 1.2; height: 0.22');
         saveBtn.setAttribute('material', 'color: #4CAF50; opacity: 0.95');
-        saveBtn.setAttribute('position', '0 -0.5 0');
+        saveBtn.setAttribute('position', '0 -0.5 0'); // Relatief aan keyboard, so keyboard is at -3 0.6 0
         saveBtn.setAttribute('text', 'value: Beantwoord; align: center; color: white; width: 2');
         saveBtn.setAttribute('class', 'gaze-interactive');
         saveBtn.addEventListener('click', () => {
