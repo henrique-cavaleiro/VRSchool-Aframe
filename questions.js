@@ -3,10 +3,11 @@ window.questions = {
   'overdekte': {
     vraag: 'Wat is de functie van de overdekte ruimte?',
     antwoorden: {
-      A: 'Fietsenstalling',
+      A: 'Ontspanning',
       B: 'Klaslokaal',
       C: 'Directiekantoor'
-    }
+    },
+    correct: 'A'
   },
   'lockers_et': {
     vraag: 'Wat vind je in deze ruimte?',
@@ -14,7 +15,8 @@ window.questions = {
       A: 'Lockers',
       B: 'Sportmateriaal',
       C: 'Kantine'
-    }
+    },
+    correct: 'A'
   },
   'praktijk_gang_begin': {
     vraag: 'Welke richting gaat naar het elektriciteitslokaal?',
@@ -22,7 +24,8 @@ window.questions = {
       A: 'Links',
       B: 'Rechts',
       C: 'Rechtdoor'
-    }
+    },
+    correct: 'A'
   },
   'praktijk_gang_midden': {
     vraag: 'Wat is er in het midden van de gang?',
@@ -30,7 +33,8 @@ window.questions = {
       A: 'Een trap',
       B: 'Een lokaal',
       C: 'Een automaat'
-    }
+    },
+    correct: 'B'
   },
   'lokaal_011_elektriciteit': {
     vraag: 'Wat leer je in lokaal 011?',
@@ -38,7 +42,8 @@ window.questions = {
       A: 'Elektriciteit',
       B: 'Houtbewerking',
       C: 'Frans'
-    }
+    },
+    correct: 'A'
   },
   'hout_1': {
     vraag: 'Wat wordt hier vooral gedaan?',
@@ -46,7 +51,8 @@ window.questions = {
       A: 'Houtbewerking',
       B: 'Schilderen',
       C: 'Koken'
-    }
+    },
+    correct: 'A'
   },
   'hout_2': {
     vraag: 'Wat is het verschil tussen Hout 1 en Hout 2?',
@@ -54,14 +60,16 @@ window.questions = {
       A: 'Andere machines',
       B: 'Andere leerkracht',
       C: 'Andere vloer'
-    }
+    },
+    correct: 'A'
   },
   'hout_3': {
     vraag: 'Wat vind je in Hout 3?',
     antwoorden: {
-      A: 'Werkbanken',
+      A: 'Borden',
       B: 'Computers',
-      C: 'Borden'
-    }
+      C: 'Werkbanken'
+    },
+    correct: 'C'
   }
 };

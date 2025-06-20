@@ -83,11 +83,37 @@ AFRAME.registerComponent('next-room', {
           try { allAnswers = JSON.parse(localStorage.getItem('vr_answers') || '{}'); } catch(e) {}
           allAnswers[room] = answer;
           localStorage.setItem('vr_answers', JSON.stringify(allAnswers));
-          // Verberg alles
-          if (vraagEntity) vraagEntity.setAttribute('visible', 'false');
-          keyboard.setAttribute('visible', 'false');
-          document.querySelector('#textfield').setAttribute('visible', 'false');
-          saveBtn.setAttribute('visible', 'false');
+          // Check if correct and animate
+          const correct = window.questions[room].correct;
+          const textfield = document.querySelector('#textfield');
+          if (answer === correct) {
+            // Flash green
+            textfield.setAttribute('animation__color', {
+              property: 'material.color',
+              to: '#4CAF50',
+              dur: 500,
+              dir: 'alternate',
+              loop: 4
+            });
+          } else {
+            // Flash red
+            textfield.setAttribute('animation__color', {
+              property: 'material.color',
+              to: '#f44336',
+              dur: 500,
+              dir: 'alternate',
+              loop: 4
+            });
+          }
+          // Verberg alles na animatie
+          setTimeout(() => {
+            if (vraagEntity) vraagEntity.setAttribute('visible', 'false');
+            keyboard.setAttribute('visible', 'false');
+            textfield.setAttribute('visible', 'false');
+            saveBtn.setAttribute('visible', 'false');
+            // Reset color
+            textfield.setAttribute('material', 'color', '#fff');
+          }, 600);
         });
         keyboard.appendChild(saveBtn);
       } else {
